@@ -5,19 +5,22 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import FotoOne from "../../assets/one.jpeg";
-import IconMarket from '../../assets/Icons/shop.svg';
+// import FotoOne from "../../assets/one.jpeg";
+// import IconMarket from '../../assets/Icons/shop.svg';
 
 const dimensions = Dimensions.get('window');
 
 export default class Home extends Component {
+    constructor(props) {
+        super(props)
+    }
     render() {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
                     <View style={{ flex: 1 }}>
                         <Image
-                            source={FotoOne}
+                            source={require('../../assets/one.jpeg')}
                             resizeMode="cover"
                             style={styles.headerImage}
                         />
@@ -73,7 +76,11 @@ export default class Home extends Component {
                             onPress={() => this.props.navigation.navigate('E-Pasar')}
                             style={[styles.menuWrapper, { width: '25%' }]}>
                             <View style={styles.menuBox}>
-                                <IconMarket width={27} height={27} />
+                                {/* <Image
+                                    source={require('../../assets/Icons/shop.svg')}
+                                    style={{ width: 25, height: 25, color: '#000' }}
+                                /> */}
+                                <Icon name="basket-outline" size={25} color="#000" />
                             </View>
                             <Text style={styles.menuText}>E-Pasar</Text>
                         </TouchableOpacity>
@@ -124,7 +131,7 @@ export default class Home extends Component {
                         <View style={styles.berita}>
                             <View style={styles.beritaImgWrapper}>
                                 <Image
-                                    source={FotoOne}
+                                    source={require('../../assets/one.jpeg')}
                                     resizeMode="cover"
                                     style={styles.beritaImg}
                                 />
@@ -139,7 +146,7 @@ export default class Home extends Component {
                         <View style={styles.berita}>
                             <View style={styles.beritaImgWrapper}>
                                 <Image
-                                    source={FotoOne}
+                                    source={require('../../assets/one.jpeg')}
                                     resizeMode="cover"
                                     style={styles.beritaImg}
                                 />

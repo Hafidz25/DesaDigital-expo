@@ -68,7 +68,7 @@ export default class Login extends Component {
                     this.storeToken(JSON.stringify(responseJson.access_token));
                     this.saveItem('access_token', responseJson.access_token)
                     this.saveItem('refresh_token', responseJson.refresh_token)
-                    this.props.navigation.replace("Utama")
+                    this.props.navigation.navigate("Utama")
                 } else {
                     alert(responseJson.message)
                 }
