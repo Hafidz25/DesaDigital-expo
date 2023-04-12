@@ -83,7 +83,7 @@ export default class EditWarga extends Component {
             "Accept": "application/json",
         };
 
-        let url = "http://10.0.0.151:8000/api/v1/master/religions";
+        let url = "https://host02.birosolusi.com/edesa/public/api/v1/master/religions";
 
         fetch(url, {
             method: "GET",

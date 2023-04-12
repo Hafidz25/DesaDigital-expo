@@ -290,11 +290,12 @@ export default class TambahDataWarga extends Component {
 
         if (!result.canceled) {
             //   setImage(result.assets[0].uri);
-            this.setState({ foto: result.assets[0].uri })
+            this.setState({ foto: result.assets[0].uri, fotoProfil: false })
         }
         // launchImageLibrary(
         //     {
         //         title: 'Select Image',
+
         //         allowsEditing: false,
         //         quality: 0.9,
         //         maxWidth: 200,
@@ -319,20 +320,29 @@ export default class TambahDataWarga extends Component {
     };
 
     renderFileUriFoto() {
-        if (this.state.foto.uri) {
-            return <Image
-                // source={{uri: `data:image/gif;base64,${this.state.image}`}}
-                source={{
-                    uri: Platform.OS === "android" ? this.state.foto.uri : this.state.foto.uri.replace("file://", ""),
-                }}
-                style={{
+        if (this.state.foto) {
+            return (
+                <Image source={{ uri: this.state.foto}} style={{
                     width: 130,
                     height: 140,
                     borderWidth: 2,
                     borderRadius: 100,
                     borderColor: '#cdcdcd',
-                }}
-            />
+                }} />
+            )   
+            // <Image
+            //     // source={{uri: `data:image/gif;base64,${this.state.image}`}}
+            //     source={{
+            //         uri: Platform.OS === "android" ? this.state.foto.uri : this.state.foto.uri.replace("file://", ""),
+            //     }}
+                // style={{
+                //     width: 130,
+                //     height: 140,
+                //     borderWidth: 2,
+                //     borderRadius: 100,
+                //     borderColor: '#cdcdcd',
+                // }}
+            // />
         } else {
             return <Image
                 source={Logo}
@@ -388,57 +398,83 @@ export default class TambahDataWarga extends Component {
     }
 
     async FileTtdPicker() {
-        launchImageLibrary(
-            {
-                title: 'Select Image',
-                allowsEditing: false,
-                quality: 0.9,
-                maxWidth: 200,
-                maxHeight: 200,
-                mediaType: "photo",
-                includeBase64: true,
-                storageOptions: {
-                    skipBackup: true,
-                    cameraRoll: false
-                },
-            },
-            (response => {
-                if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                } else {
-                    this.setState({ fileTtd: response })
-                }
-            })
-        )
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            //   setImage(result.assets[0].uri);
+            this.setState({ fileTtd: result.assets[0].uri })
+        }
+        // launchImageLibrary(
+        //     {
+        //         title: 'Select Image',
+        //         allowsEditing: false,
+        //         quality: 0.9,
+        //         maxWidth: 200,
+        //         maxHeight: 200,
+        //         mediaType: "photo",
+        //         includeBase64: true,
+        //         storageOptions: {
+        //             skipBackup: true,
+        //             cameraRoll: false
+        //         },
+        //     },
+        //     (response => {
+        //         if (response.didCancel) {
+        //             console.log('User cancelled image picker');
+        //         } else if (response.error) {
+        //             console.log('ImagePicker Error: ', response.error);
+        //         } else {
+        //             this.setState({ fileTtd: response })
+        //         }
+        //     })
+        // )
     }
 
     async FileAgamaPicker() {
-        launchImageLibrary(
-            {
-                title: 'Select Image',
-                allowsEditing: false,
-                quality: 0.9,
-                maxWidth: 200,
-                maxHeight: 200,
-                mediaType: "photo",
-                includeBase64: true,
-                storageOptions: {
-                    skipBackup: true,
-                    cameraRoll: false
-                },
-            },
-            (response => {
-                if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                } else {
-                    this.setState({ fileAgama: response })
-                }
-            })
-        )
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            //   setImage(result.assets[0].uri);
+            this.setState({ fileAgama: result.assets[0].uri })
+        }
+        // launchImageLibrary(
+        //     {
+        //         title: 'Select Image',
+        //         allowsEditing: false,
+        //         quality: 0.9,
+        //         maxWidth: 200,
+        //         maxHeight: 200,
+        //         mediaType: "photo",
+        //         includeBase64: true,
+        //         storageOptions: {
+        //             skipBackup: true,
+        //             cameraRoll: false
+        //         },
+        //     },
+        //     (response => {
+        //         if (response.didCancel) {
+        //             console.log('User cancelled image picker');
+        //         } else if (response.error) {
+        //             console.log('ImagePicker Error: ', response.error);
+        //         } else {
+        //             this.setState({ fileAgama: response })
+        //         }
+        //     })
+        // )
     }
 
 
@@ -466,7 +502,7 @@ export default class TambahDataWarga extends Component {
                             borderColor: '#cdcdcd',
                         }}
                     /> */}
-                    <Image source={{ uri: this.state.fileKtp }} style={{ width: 200, height: 200 }} />
+                    <Image source={{ uri: this.state.fileKtp }} style={{width: 200, height: 200}} />
                     <View style={styles.dateView2}>
                         <View style={{
                             marginTop: 75,
@@ -515,7 +551,7 @@ export default class TambahDataWarga extends Component {
                     marginBottom: 5,
                     justifyContent: 'space-between'
                 }}>
-                    <Image
+                    {/* <Image
                         source={{
                             uri: Platform.OS === "android" ? this.state.fileTtd.uri : this.state.fileTtd.uri.replace("file://", ""),
                         }}
@@ -527,7 +563,14 @@ export default class TambahDataWarga extends Component {
                             borderRadius: 10,
                             borderColor: '#cdcdcd',
                         }}
-                    />
+                    /> */}
+                    <Image source={{ uri: this.state.fileTtd }} style={{
+                            left: 5,
+                            width: 295,
+                            height: 175,
+                            borderWidth: 2,
+                            borderRadius: 10,
+                            borderColor: '#cdcdcd',}} />
                     <View style={styles.dateView2}>
                         <View style={{
                             marginTop: 75,
@@ -576,7 +619,7 @@ export default class TambahDataWarga extends Component {
                     marginBottom: 5,
                     justifyContent: 'space-between'
                 }}>
-                    <Image
+                    {/* <Image
                         source={{
                             uri: Platform.OS === "android" ? this.state.fileAgama.uri : this.state.fileAgama.uri.replace("file://", ""),
                         }}
@@ -588,7 +631,14 @@ export default class TambahDataWarga extends Component {
                             borderRadius: 10,
                             borderColor: '#cdcdcd',
                         }}
-                    />
+                    /> */}
+                    <Image source={{ uri: this.state.fileAgama }} style={{
+                            left: 5,
+                            width: 295,
+                            height: 175,
+                            borderWidth: 2,
+                            borderRadius: 10,
+                            borderColor: '#cdcdcd',}} />
                     <View style={styles.dateView2}>
                         <View style={{
                             marginTop: 75,
@@ -1078,35 +1128,35 @@ export default class TambahDataWarga extends Component {
 
         console.log(JSON.stringify(formData))
 
-        // let headers = {
-        //     "x-access-token": token,
-        //     "Content-Type": "multipart/form-data",
-        //     "Accept": "application/json",
-        // };
+        let headers = {
+            "x-access-token": token,
+            "Content-Type": "multipart/form-data",
+            "Accept": "application/json",
+        };
 
-        // let url = "http://10.0.0.151:8000/api/v1/penduduks";
+        let url = "host02.birosolusi.com/edesa/public/api/v1/penduduks";
 
-        // fetch(url, {
-        //     method: "POST",
-        //     headers,
-        //     body: formData,
-        // })
-        // .then((response) => {
-        //     if(response.status == 201){
-        //         Alert.alert(
-        //             "Delete Riwayat",
-        //             "Data Gagal Dihapus",
-        //             [
-        //                 { text: "OK", onPress: () => this.props.navigation.replace('Dashboard')}
-        //             ],{ cancelable: false }
-        //         )
-        //     } else{
-        //         alert("Tambah Data Gagal")
-        //     }
-        // })
-        // .catch((error) => {
-        //     console.log(error)
-        // });
+        fetch(url, {
+            method: "POST",
+            headers,
+            body: formData,
+        })
+        .then((response) => {
+            if(response.status == 201){
+                Alert.alert(
+                    "Delete Riwayat",
+                    "Data Gagal Dihapus",
+                    [
+                        { text: "OK", onPress: () => this.props.navigation.replace('Dashboard')}
+                    ],{ cancelable: false }
+                )
+            } else{
+                alert("Tambah Data Gagal")
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        });
     }
 
     render() {
