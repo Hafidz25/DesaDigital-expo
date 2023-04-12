@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { 
+import {
     View, TextInput, Text, StyleSheet, TouchableOpacity,
     ScrollView, Platform, Image, Alert,
 } from 'react-native';
@@ -10,7 +10,8 @@ import { DatePicker } from 'react-native-woodpicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 import Logo from '../../assets/images.png'
 
@@ -22,13 +23,13 @@ const question = [
         text: 'Ya',
     },
     {
-		key: 'Tidak',
-		text: 'Tidak',
+        key: 'Tidak',
+        text: 'Tidak',
     }
 ];
 
 export default class TambahDataWarga extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             access_token: '',
@@ -66,11 +67,11 @@ export default class TambahDataWarga extends Component {
             tglNegara: '',
             idNegara: '',
 
-            aliasForm : [],
-            inputDataAlias : [],
+            aliasForm: [],
+            inputDataAlias: [],
 
-            pekerjaanForm : [],
-            inputDataPekerjaan : [],
+            pekerjaanForm: [],
+            inputDataPekerjaan: [],
             inputTglPekerjaan: [],
             tanggalPekerjaan: [],
             tglPekerjaan: '',
@@ -81,12 +82,12 @@ export default class TambahDataWarga extends Component {
     componentDidMount = () => {
         this.getToken();
     }
-    
+
     async getToken() {
         try {
             let userData = await AsyncStorage.getItem('access_token');
             let data = JSON.parse(userData);
-            this.setState({access_token: data})
+            this.setState({ access_token: data })
         } catch (error) {
             console.log("Something went wrong", error);
         }
@@ -110,12 +111,12 @@ export default class TambahDataWarga extends Component {
             method: "GET",
             headers,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataAgama: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataAgama: responseJson.data
+                })
             })
-        })
     }
 
     _GetNegara = async () => {
@@ -139,12 +140,12 @@ export default class TambahDataWarga extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataNegara: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataNegara: responseJson.data
+                })
             })
-        })
     }
 
     _GetProvinsi = async () => {
@@ -162,12 +163,12 @@ export default class TambahDataWarga extends Component {
             method: "GET",
             headers,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataProvinsi: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataProvinsi: responseJson.data
+                })
             })
-        })
     }
 
     _GetKota = async () => {
@@ -194,55 +195,55 @@ export default class TambahDataWarga extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataKota: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataKota: responseJson.data
+                })
             })
-        })
     }
 
-    renderKota(){
-        if(this.state.dataKota != ''){
-            return(
+    renderKota() {
+        if (this.state.dataKota != '') {
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kota Lahir
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
                     <SelectDropdown
-                        data = {this.state.dataKota.map(k => (k.name))}
-                        onSelect = {this.onKotaLahirChange.bind(this)}
+                        data={this.state.dataKota.map(k => (k.name))}
+                        onSelect={this.onKotaLahirChange.bind(this)}
                         defaultButtonText={"Pilih Kota"}
-                        buttonTextAfterSelection = {(selectedItem) => {
+                        buttonTextAfterSelection={(selectedItem) => {
                             return selectedItem;
                         }}
-                        rowTextForSelection = {(item) => {
+                        rowTextForSelection={(item) => {
                             return item;
                         }}
-                        buttonStyle = {styles.dropdownBtnStyle}
-                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                        renderDropdownIcon = {() => {
+                        buttonStyle={styles.dropdownBtnStyle}
+                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                        renderDropdownIcon={() => {
                             return (
                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                             );
                         }}
-                        dropdownIconPosition = {'right'}
-                        rowStyle = {styles.dropdownRowStyle}
-                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                        dropdownIconPosition={'right'}
+                        rowStyle={styles.dropdownRowStyle}
+                        rowTextStyle={styles.dropdownRowTxtStyle}
                     />
                 </View>
             )
         } else {
-            return(
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kota Lahir
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={styles.inputText}
-                        placeholder="Pilih Kota Lahir" 
+                        placeholder="Pilih Kota Lahir"
                         placeholderTextColor='#777'
                         editable={false}
                     />
@@ -256,8 +257,8 @@ export default class TambahDataWarga extends Component {
             {
                 title: 'Select Image',
                 allowsEditing: false,
-                maxWidth:200,
-                maxHeight:200,
+                maxWidth: 200,
+                maxHeight: 200,
                 mediaType: "photo",
                 includeBase64: true,
                 storageOptions: {
@@ -282,9 +283,9 @@ export default class TambahDataWarga extends Component {
             {
                 title: 'Select Image',
                 allowsEditing: false,
-                quality:0.9,
-                maxWidth:200,
-                maxHeight:200,
+                quality: 0.9,
+                maxWidth: 200,
+                maxHeight: 200,
                 mediaType: "photo",
                 includeBase64: true,
                 storageOptions: {
@@ -308,7 +309,7 @@ export default class TambahDataWarga extends Component {
         if (this.state.foto.uri) {
             return <Image
                 // source={{uri: `data:image/gif;base64,${this.state.image}`}}
-                source={{ 
+                source={{
                     uri: Platform.OS === "android" ? this.state.foto.uri : this.state.foto.uri.replace("file://", ""),
                 }}
                 style={{
@@ -334,30 +335,43 @@ export default class TambahDataWarga extends Component {
     }
 
     async FileKtpPicker() {
-        launchImageLibrary(
-            {
-                title: 'Select Image',
-                allowsEditing: false,
-                quality:0.9,
-                maxWidth:200,
-                maxHeight:200,
-                mediaType: "photo",
-                includeBase64: true,
-                storageOptions: {
-                    skipBackup: true,
-                    cameraRoll: false
-                },
-            },
-            (response => {
-                if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                } else {
-                    this.setState({fileKtp: response})
-                }
-            })
-        )
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result) {
+            //   setImage(result.assets[0].uri);
+            this.setState({ fileKtp: result.assets[0].uri })
+        }
+        // launchImageLibrary(
+        //     {
+        //         title: 'Select Image',
+        //         allowsEditing: false,
+        //         quality: 0.9,
+        //         maxWidth: 200,
+        //         maxHeight: 200,
+        //         mediaType: "photo",
+        //         includeBase64: true,
+        //         storageOptions: {
+        //             skipBackup: true,
+        //             cameraRoll: false
+        //         },
+        //     },
+        //     (response => {
+        //         if (response.didCancel) {
+        //             console.log('User cancelled image picker');
+        //         } else if (response.error) {
+        //             console.log('ImagePicker Error: ', response.error);
+        //         } else {
+        //             this.setState({ fileKtp: response })
+        //         }
+        //     })
+        // )
     }
 
     async FileTtdPicker() {
@@ -365,9 +379,9 @@ export default class TambahDataWarga extends Component {
             {
                 title: 'Select Image',
                 allowsEditing: false,
-                quality:0.9,
-                maxWidth:200,
-                maxHeight:200,
+                quality: 0.9,
+                maxWidth: 200,
+                maxHeight: 200,
                 mediaType: "photo",
                 includeBase64: true,
                 storageOptions: {
@@ -381,7 +395,7 @@ export default class TambahDataWarga extends Component {
                 } else if (response.error) {
                     console.log('ImagePicker Error: ', response.error);
                 } else {
-                    this.setState({fileTtd: response})
+                    this.setState({ fileTtd: response })
                 }
             })
         )
@@ -392,9 +406,9 @@ export default class TambahDataWarga extends Component {
             {
                 title: 'Select Image',
                 allowsEditing: false,
-                quality:0.9,
-                maxWidth:200,
-                maxHeight:200,
+                quality: 0.9,
+                maxWidth: 200,
+                maxHeight: 200,
                 mediaType: "photo",
                 includeBase64: true,
                 storageOptions: {
@@ -408,26 +422,27 @@ export default class TambahDataWarga extends Component {
                 } else if (response.error) {
                     console.log('ImagePicker Error: ', response.error);
                 } else {
-                    this.setState({fileAgama: response})
+                    this.setState({ fileAgama: response })
                 }
             })
         )
     }
 
 
-    renderFileKtp (){
-        if(this.state.fileKtp != ''){
+    renderFileKtp() {
+        if (this.state.fileKtp != '') {
             return (
                 <View style={{
-                    flexDirection:'row',
+                    flexDirection: 'row',
                     marginLeft: 5,
                     marginRight: 20,
                     marginTop: 7,
                     marginBottom: 5,
-                    justifyContent:'space-between'}}>
+                    justifyContent: 'space-between'
+                }}>
                     <Image
                         source={{
-                            uri: Platform.OS === "android" ? this.state.fileKtp.uri : this.state.fileKtp.uri.replace("file://", ""),
+                            uri: Platform.OS === "android" ? this.state.fileKtp : this.state.fileKtp.replace("file://", ""),
                         }}
                         style={{
                             left: 5,
@@ -439,12 +454,13 @@ export default class TambahDataWarga extends Component {
                         }}
                     />
                     <View style={styles.dateView2}>
-                        <View style = {{
+                        <View style={{
                             marginTop: 75,
-                            justifyContent: 'center'}}>
+                            justifyContent: 'center'
+                        }}>
                             <TouchableOpacity
-                                onPress={() => {this.setState({fileKtp: ''})}}>
-                                <Icon style={{left:15}} name='remove-circle-outline' color = {'#EE4A4A'} size = {30}/>
+                                onPress={() => { this.setState({ fileKtp: '' }) }}>
+                                <Icon style={{ left: 15 }} name='remove-circle-outline' color={'#EE4A4A'} size={30} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -453,17 +469,19 @@ export default class TambahDataWarga extends Component {
         } else {
             return (
                 <View>
-                    <View style = {{
+                    <View style={{
                         flexDirection: 'row',
                         marginTop: 10,
-                        justifyContent: 'flex-start'}}>
+                        justifyContent: 'flex-start'
+                    }}>
                         <TouchableOpacity style={styles.fileBtn}
                             onPress={this.FileKtpPicker.bind(this)}>
-                            <Text style = {styles.fileText}>Pilih File</Text>
+                            <Text style={styles.fileText}>Pilih File</Text>
                         </TouchableOpacity>
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between'}}>
+                            justifyContent: 'space-between'
+                        }}>
                             <Text style={styles.uploadText}>No File Selected</Text>
                         </View>
                     </View>
@@ -472,16 +490,17 @@ export default class TambahDataWarga extends Component {
         }
     }
 
-    renderFileTtd (){
-        if(this.state.fileTtd != ''){
+    renderFileTtd() {
+        if (this.state.fileTtd != '') {
             return (
                 <View style={{
-                    flexDirection:'row',
+                    flexDirection: 'row',
                     marginLeft: 5,
                     marginRight: 20,
                     marginTop: 7,
                     marginBottom: 5,
-                    justifyContent:'space-between'}}>
+                    justifyContent: 'space-between'
+                }}>
                     <Image
                         source={{
                             uri: Platform.OS === "android" ? this.state.fileTtd.uri : this.state.fileTtd.uri.replace("file://", ""),
@@ -496,12 +515,13 @@ export default class TambahDataWarga extends Component {
                         }}
                     />
                     <View style={styles.dateView2}>
-                        <View style = {{
+                        <View style={{
                             marginTop: 75,
-                            justifyContent: 'center'}}>
+                            justifyContent: 'center'
+                        }}>
                             <TouchableOpacity
-                                onPress={() => {this.setState({fileTtd: ''})}}>
-                                <Icon style={{left:15}} name='remove-circle-outline' color = {'#EE4A4A'} size = {30}/>
+                                onPress={() => { this.setState({ fileTtd: '' }) }}>
+                                <Icon style={{ left: 15 }} name='remove-circle-outline' color={'#EE4A4A'} size={30} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -510,17 +530,19 @@ export default class TambahDataWarga extends Component {
         } else {
             return (
                 <View>
-                    <View style = {{
+                    <View style={{
                         flexDirection: 'row',
                         marginTop: 10,
-                        justifyContent: 'flex-start'}}>
+                        justifyContent: 'flex-start'
+                    }}>
                         <TouchableOpacity style={styles.fileBtn}
                             onPress={this.FileTtdPicker.bind(this)}>
-                            <Text style = {styles.fileText}>Pilih File</Text>
+                            <Text style={styles.fileText}>Pilih File</Text>
                         </TouchableOpacity>
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between'}}>
+                            justifyContent: 'space-between'
+                        }}>
                             <Text style={styles.uploadText}>No File Selected</Text>
                         </View>
                     </View>
@@ -529,16 +551,17 @@ export default class TambahDataWarga extends Component {
         }
     }
 
-    renderFileAgama (){
-        if(this.state.fileAgama != ''){
+    renderFileAgama() {
+        if (this.state.fileAgama != '') {
             return (
                 <View style={{
-                    flexDirection:'row',
+                    flexDirection: 'row',
                     marginLeft: 5,
                     marginRight: 20,
                     marginTop: 7,
                     marginBottom: 5,
-                    justifyContent:'space-between'}}>
+                    justifyContent: 'space-between'
+                }}>
                     <Image
                         source={{
                             uri: Platform.OS === "android" ? this.state.fileAgama.uri : this.state.fileAgama.uri.replace("file://", ""),
@@ -553,12 +576,13 @@ export default class TambahDataWarga extends Component {
                         }}
                     />
                     <View style={styles.dateView2}>
-                        <View style = {{
+                        <View style={{
                             marginTop: 75,
-                            justifyContent: 'center'}}>
+                            justifyContent: 'center'
+                        }}>
                             <TouchableOpacity
-                                onPress={() => {this.setState({fileAgama: ''})}}>
-                                <Icon style={{left:15}} name='remove-circle-outline' color = {'#EE4A4A'} size = {30}/>
+                                onPress={() => { this.setState({ fileAgama: '' }) }}>
+                                <Icon style={{ left: 15 }} name='remove-circle-outline' color={'#EE4A4A'} size={30} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -567,17 +591,19 @@ export default class TambahDataWarga extends Component {
         } else {
             return (
                 <View>
-                    <View style = {{
+                    <View style={{
                         flexDirection: 'row',
                         marginTop: 10,
-                        justifyContent: 'flex-start'}}>
+                        justifyContent: 'flex-start'
+                    }}>
                         <TouchableOpacity style={styles.fileBtn}
                             onPress={this.FileAgamaPicker.bind(this)}>
-                            <Text style = {styles.fileText}>Pilih File</Text>
+                            <Text style={styles.fileText}>Pilih File</Text>
                         </TouchableOpacity>
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between'}}>
+                            justifyContent: 'space-between'
+                        }}>
                             <Text style={styles.uploadText}>No File Selected</Text>
                         </View>
                     </View>
@@ -595,39 +621,39 @@ export default class TambahDataWarga extends Component {
     }
 
     onJenisKelaminChange = (jenisKelamin) => {
-        if(jenisKelamin == 'Male'){
-            this.setState({jenisKelamin: 'M'})
+        if (jenisKelamin == 'Male') {
+            this.setState({ jenisKelamin: 'M' })
         } else {
-            this.setState({jenisKelamin: 'F'})
+            this.setState({ jenisKelamin: 'F' })
         }
     }
 
     onGolonganDarahChange = (golonganDarah) => {
-        this.setState({golonganDarah});
+        this.setState({ golonganDarah });
     }
 
     handleTanggal = () =>
         this.state.tanggal
-        ? moment.utc(this.state.tanggal).format('DD/MM/YYYY')
-        : "DD/MM/YYYY";
-    
+            ? moment.utc(this.state.tanggal).format('DD/MM/YYYY')
+            : "DD/MM/YYYY";
+
     onTanggal = (tanggal) => {
-        this.setState({tanggal});
+        this.setState({ tanggal });
     };
 
     onLokasiLahirChange = (lokasiLahir) => {
-        this.setState({lokasiLahir});
+        this.setState({ lokasiLahir });
     }
 
     onDokterChange = (dokter) => {
-        this.setState({dokter});
+        this.setState({ dokter });
     }
 
     onProvinsiChange = (provinsi) => {
         setTimeout(() => {
             const data = this.state.dataProvinsi
             const index = data.findIndex(x => x.name === provinsi)
-            this.setState({idProvinsi:data[index].id, provinsi:provinsi})
+            this.setState({ idProvinsi: data[index].id, provinsi: provinsi })
             this._GetKota();
         }, 0);
     }
@@ -636,55 +662,55 @@ export default class TambahDataWarga extends Component {
         setTimeout(() => {
             const data = this.state.dataKota
             const index = data.findIndex(x => x.name === kotaLahir)
-            this.setState({idKota:data[index].id, kotaLahir:kotaLahir})
+            this.setState({ idKota: data[index].id, kotaLahir: kotaLahir })
         }, 0);
     }
 
     onNameChange = (nama) => {
-        this.setState({nama});
+        this.setState({ nama });
     }
 
     handleTanggalNama = () =>
         this.state.tglNama
-        ? moment.utc(this.state.tglNama).format('DD/MM/YYYY')
-        : "DD/MM/YYYY";
-    
+            ? moment.utc(this.state.tglNama).format('DD/MM/YYYY')
+            : "DD/MM/YYYY";
+
     onTanggalNama = (tglNama) => {
-        this.setState({tglNama});
+        this.setState({ tglNama });
     };
 
     onAgamaChange = (agama) => {
         setTimeout(() => {
             const data = this.state.dataAgama
             const index = data.findIndex(x => x.name === agama)
-            this.setState({idAgama:data[index].id, agama:agama})
+            this.setState({ idAgama: data[index].id, agama: agama })
         }, 0);
     }
 
     handleTanggalAgama = () =>
         this.state.tglAgama
-        ? moment.utc(this.state.tglAgama).format('DD/MM/YYYY')
-        : "DD/MM/YYYY";
-    
+            ? moment.utc(this.state.tglAgama).format('DD/MM/YYYY')
+            : "DD/MM/YYYY";
+
     onTanggalAgama = (tglAgama) => {
-        this.setState({tglAgama});
+        this.setState({ tglAgama });
     };
 
     onNegaraChange = (negara) => {
         setTimeout(() => {
             const data = this.state.dataNegara
             const index = data.findIndex(x => x.name === negara)
-            this.setState({idNegara:data[index].id, negara:negara})
+            this.setState({ idNegara: data[index].id, negara: negara })
         }, 0);
     }
 
     handleTanggalNegara = () =>
         this.state.tglNegara
-        ? moment.utc(this.state.tglNegara).format('DD/MM/YYYY')
-        : "DD/MM/YYYY";
-    
+            ? moment.utc(this.state.tglNegara).format('DD/MM/YYYY')
+            : "DD/MM/YYYY";
+
     onTanggalNegara = (tglNegara) => {
-        this.setState({tglNegara});
+        this.setState({ tglNegara });
     };
 
     //function to add TextInput dynamically
@@ -692,15 +718,16 @@ export default class TambahDataWarga extends Component {
         let aliasForm = this.state.aliasForm;
         aliasForm.push(
             <View style={{
-                flexDirection:'row',
+                flexDirection: 'row',
                 marginLeft: 5,
                 marginRight: 20,
                 marginTop: 7,
                 marginBottom: 5,
-                justifyContent:'space-between'}}>
+                justifyContent: 'space-between'
+            }}>
                 <View style={styles.dateView2}>
-                    <TextInput 
-                        style={[styles.inputText,{left:5,width:300}]}
+                    <TextInput
+                        style={[styles.inputText, { left: 5, width: 300 }]}
                         placeholder="Masukkan Nama Alias"
                         placeholderTextColor="#000"
                         keyboardType='default'
@@ -708,12 +735,13 @@ export default class TambahDataWarga extends Component {
                     />
                 </View>
                 <View style={styles.dateView2}>
-                    <View style = {{
+                    <View style={{
                         marginTop: 11,
-                        justifyContent: 'center'}}>
+                        justifyContent: 'center'
+                    }}>
                         <TouchableOpacity
                             onPress={() => this.removeTextInput()}>
-                            <Icon style={{left:15}} name='remove-circle-outline' color = {'#EE4A4A'} size = {30}/>
+                            <Icon style={{ left: 15 }} name='remove-circle-outline' color={'#EE4A4A'} size={30} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -727,25 +755,25 @@ export default class TambahDataWarga extends Component {
         let inputDataAlias = this.state.inputDataAlias;
         aliasForm.pop();
         inputDataAlias.pop();
-        this.setState({ aliasForm,inputDataAlias });
+        this.setState({ aliasForm, inputDataAlias });
     }
 
     addValues = (text, index) => {
         let dataArray = this.state.inputDataAlias;
         let checkBool = false;
-        if (dataArray.length !== 0){
+        if (dataArray.length !== 0) {
             dataArray.forEach(element => {
-                if (element.index === index ){
+                if (element.index === index) {
                     element.text = text;
                     checkBool = true;
                 }
             });
-        } if (checkBool){
+        } if (checkBool) {
             this.setState({
                 inputDataAlias: dataArray
             });
         } else {
-            dataArray.push({'text':text,'index':index});
+            dataArray.push({ 'text': text, 'index': index });
             this.setState({
                 inputDataAlias: dataArray
             });
@@ -753,26 +781,27 @@ export default class TambahDataWarga extends Component {
     }
 
     getValues = () => {
-        console.log('Data',this.state.inputDataAlias);
+        console.log('Data', this.state.inputDataAlias);
     }
 
     getValues2 = () => {
-        console.log('Data',this.state.inputDataPekerjaan, this.state.inputDetailPekerjaan);
+        console.log('Data', this.state.inputDataPekerjaan, this.state.inputDetailPekerjaan);
     }
 
     addPekerjaanForm = (index) => {
         let pekerjaanForm = this.state.pekerjaanForm;
         pekerjaanForm.push(
             <View style={{
-                flexDirection:'row',
+                flexDirection: 'row',
                 marginLeft: 5,
                 marginRight: 20,
                 marginTop: 7,
                 marginBottom: 5,
-                justifyContent:'space-between'}}>
+                justifyContent: 'space-between'
+            }}>
                 <View style={styles.dateView2}>
-                    <TextInput 
-                        style={[styles.inputText,{marginBottom:5,left:5,width:300}]}
+                    <TextInput
+                        style={[styles.inputText, { marginBottom: 5, left: 5, width: 300 }]}
                         placeholder="Pekerjaan / Karir..."
                         placeholderTextColor="#000"
                         keyboardType='default'
@@ -780,31 +809,32 @@ export default class TambahDataWarga extends Component {
                     />
                     <DatePicker
                         locale="id"
-                        onDateChange={(text) => this.addTglPekerjaan(text,index)}
+                        onDateChange={(text) => this.addTglPekerjaan(text, index)}
                         text={(text) => this.handleTanggalPekerjaan(text)}
                         isNullable={false}
                         maximumDate={new Date()}
                         iosDisplay="compact"
                         androidDisplay="default"
-                        style={[styles.datePickerStyle,{marginBottom:5,left:5,width:300}]}
+                        style={[styles.datePickerStyle, { marginBottom: 5, left: 5, width: 300 }]}
                         textInputStyle={styles.dateText}
                     />
-                    <TextInput 
-                        style={[styles.inputText2,{marginBottom:5,left:5,width:300}]}
+                    <TextInput
+                        style={[styles.inputText2, { marginBottom: 5, left: 5, width: 300 }]}
                         placeholder="Detail Pekerjaan / Karir..."
                         placeholderTextColor="#000"
-                        multiline = {true}
+                        multiline={true}
                         keyboardType='default'
                         onChangeText={(text) => this.addDetailPekerjaan(text, index)}
                     />
                 </View>
                 <View style={styles.dateView2}>
-                    <View style = {{
+                    <View style={{
                         marginTop: 80,
-                        justifyContent: 'center'}}>
+                        justifyContent: 'center'
+                    }}>
                         <TouchableOpacity
                             onPress={() => this.removeTextInputPekerjaan()}>
-                            <Icon style={{left:15}} name='remove-circle-outline' color = {'#EE4A4A'} size = {30}/>
+                            <Icon style={{ left: 15 }} name='remove-circle-outline' color={'#EE4A4A'} size={30} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -816,19 +846,19 @@ export default class TambahDataWarga extends Component {
     addValuesPekerjaan = (text, index) => {
         let dataArray = this.state.inputDataPekerjaan;
         let checkBool = false;
-        if (dataArray.length !== 0){
+        if (dataArray.length !== 0) {
             dataArray.forEach(element => {
-                if (element.index === index ){
+                if (element.index === index) {
                     element.text = text;
                     checkBool = true;
                 }
             });
-        } if (checkBool){
+        } if (checkBool) {
             this.setState({
                 inputDataPekerjaan: dataArray
             });
         } else {
-            dataArray.push({'text':text,'index':index});
+            dataArray.push({ 'text': text, 'index': index });
             this.setState({
                 inputDataPekerjaan: dataArray
             });
@@ -838,19 +868,19 @@ export default class TambahDataWarga extends Component {
     addDetailPekerjaan = (text, index) => {
         let dataArray = this.state.inputDetailPekerjaan;
         let checkBool = false;
-        if (dataArray.length !== 0){
+        if (dataArray.length !== 0) {
             dataArray.forEach(element => {
-                if (element.index === index ){
+                if (element.index === index) {
                     element.text = text;
                     checkBool = true;
                 }
             });
-        } if (checkBool){
+        } if (checkBool) {
             this.setState({
                 inputDetailPekerjaan: dataArray
             });
         } else {
-            dataArray.push({'text':text,'index':index});
+            dataArray.push({ 'text': text, 'index': index });
             this.setState({
                 inputDetailPekerjaan: dataArray
             });
@@ -861,7 +891,7 @@ export default class TambahDataWarga extends Component {
         // let data = JSON.stringify(this.state.inputTglPekerjaan)
         // const id = data.findIndex(val => val.index === index)
         console.log(text)
-        if(this.state.inputTglPekerjaan == ''){
+        if (this.state.inputTglPekerjaan == '') {
             return "DD/MM/YYYY"
         } else {
             return text
@@ -871,20 +901,20 @@ export default class TambahDataWarga extends Component {
     addTglPekerjaan = (text, index) => {
         let dataArray = this.state.inputTglPekerjaan;
         let checkBool = false;
-        if (dataArray.length !== 0){
+        if (dataArray.length !== 0) {
             dataArray.forEach(element => {
-                if (element.index === index ){
+                if (element.index === index) {
                     element.text = moment.utc(text).format('DD/MM/YYYY');
                     checkBool = true;
                 }
             });
-        } if (checkBool){
+        } if (checkBool) {
             this.setState({
                 inputTglPekerjaan: dataArray,
                 tglPekerjaan: text,
             });
         } else {
-            dataArray.push({'text': moment.utc(text).format('DD/MM/YYYY'),'index':index});
+            dataArray.push({ 'text': moment.utc(text).format('DD/MM/YYYY'), 'index': index });
             this.setState({
                 inputTglPekerjaan: dataArray,
                 tglPekerjaan: text,
@@ -904,16 +934,16 @@ export default class TambahDataWarga extends Component {
         this.setState({ pekerjaanForm, inputDataPekerjaan, inputTglPekerjaan, inputDetailPekerjaan });
     }
 
-    handleSubmit = async() => {
+    handleSubmit = async () => {
         const token = this.state.access_token;
 
         var profile_photo
-        if(this.state.foto == ''){
+        if (this.state.foto == '') {
             profile_photo = this.state.foto
             alert('Foto Profil Tidak Boleh Kosong')
         } else {
             profile_photo = {
-                uri: 'data:'+this.state.foto.type+';base64,' + this.state.foto.base64,
+                uri: 'data:' + this.state.foto.type + ';base64,' + this.state.foto.base64,
                 name: this.state.foto.fileName,
                 type: this.state.foto.type,
             }
@@ -924,22 +954,22 @@ export default class TambahDataWarga extends Component {
         const blood_type = this.state.golonganDarah
 
         var ktp_photo
-        if(this.state.fileKtp == ''){
+        if (this.state.fileKtp == '') {
             ktp_photo = this.state.fileKtp
         } else {
             ktp_photo = {
-                uri: 'data:'+this.state.fileKtp.type+';base64,'  + this.state.fileKtp.base64,
+                uri: 'data:' + this.state.fileKtp.type + ';base64,' + this.state.fileKtp.base64,
                 name: this.state.fileKtp.fileName,
                 type: this.state.fileKtp.type,
             }
         }
 
         var signature_photo
-        if(this.state.fileTtd == ''){
+        if (this.state.fileTtd == '') {
             signature_photo = this.state.fileTtd
         } else {
             signature_photo = {
-                uri: 'data:'+this.state.fileTtd.type+';base64,'  + this.state.fileTtd.base64,
+                uri: 'data:' + this.state.fileTtd.type + ';base64,' + this.state.fileTtd.base64,
                 name: this.state.fileTtd.fileName,
                 type: this.state.fileTtd.type,
             }
@@ -952,7 +982,7 @@ export default class TambahDataWarga extends Component {
         const name = this.state.nama
 
         var name_since
-        if(this.state.jawabanNama == '' || this.state.jawabanNama == 'Ya'){
+        if (this.state.jawabanNama == '' || this.state.jawabanNama == 'Ya') {
             name_since = ''
         } else {
             name_since = moment.utc(this.state.tglNama).format('DD/MM/YYYY')
@@ -961,18 +991,18 @@ export default class TambahDataWarga extends Component {
         const religion = this.state.idAgama
 
         var religion_since
-        if(this.state.jawabanAgama == '' || this.state.jawabanAgama == 'Ya'){
+        if (this.state.jawabanAgama == '' || this.state.jawabanAgama == 'Ya') {
             religion_since = ''
         } else {
             religion_since = moment.utc(this.state.tglAgama).format('DD/MM/YYYY')
         }
 
         var religion_document
-        if(this.state.fileAgama == ''){
+        if (this.state.fileAgama == '') {
             religion_document = this.state.fileAgama
         } else {
             religion_document = {
-                uri: 'data:'+this.state.fileAgama.type+';base64,' + this.state.fileAgama.base64,
+                uri: 'data:' + this.state.fileAgama.type + ';base64,' + this.state.fileAgama.base64,
                 name: this.state.fileAgama.fileName,
                 type: this.state.fileAgama.type,
             }
@@ -981,31 +1011,31 @@ export default class TambahDataWarga extends Component {
         const nationality = this.state.idNegara
 
         var nationality_since
-        if(this.state.jawabanNegara == '' || this.state.jawabanNegara == 'Ya'){
+        if (this.state.jawabanNegara == '' || this.state.jawabanNegara == 'Ya') {
             nationality_since = ''
         } else {
             nationality_since = moment.utc(this.state.tglNegara).format('DD/MM/YYYY')
         }
 
         var name_aliases;
-        if(this.state.inputDataAlias == ''){
+        if (this.state.inputDataAlias == '') {
             name_aliases = this.state.inputDataAlias
         } else {
-            name_aliases = this.state.inputDataAlias.map((x)=>x.text)
+            name_aliases = this.state.inputDataAlias.map((x) => x.text)
         }
 
         var career_value;
-        if(this.state.inputDataPekerjaan == ''){
+        if (this.state.inputDataPekerjaan == '') {
             career_value = this.state.inputDataPekerjaan
         } else {
-            career_value = this.state.inputDataPekerjaan.map((p)=>p.text)
+            career_value = this.state.inputDataPekerjaan.map((p) => p.text)
         }
 
         var career_detail;
-        if(this.state.inputDetailPekerjaan == ''){
+        if (this.state.inputDetailPekerjaan == '') {
             career_detail = this.state.inputDetailPekerjaan
         } else {
-            career_detail = this.state.inputDetailPekerjaan.map((d)=>d.text)
+            career_detail = this.state.inputDetailPekerjaan.map((d) => d.text)
         }
 
         // const career_since
@@ -1065,33 +1095,34 @@ export default class TambahDataWarga extends Component {
         // });
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={styles.container}>
                 <View style={styles.header}></View>
-                <View style={{marginTop:10,marginBottom:10,padding:10}}></View>
+                <View style={{ marginTop: 10, marginBottom: 10, padding: 10 }}></View>
                 <View style={styles.content}>
                     <ScrollView>
                         <View style={styles.picture}>
-                            <View style={{marginTop:5}}>
+                            <View style={{ marginTop: 5 }}>
                                 {this.renderFileUriFoto()}
                             </View>
                             <View style={{
-                                position:'absolute',
-                                marginTop:100,
-                                left:100}}>
+                                position: 'absolute',
+                                marginTop: 100,
+                                left: 100
+                            }}>
                                 <TouchableOpacity
                                     style={{
-                                        width:40,
-                                        height:40,
-                                        borderRadius:20,
-                                        backgroundColor:'#CCEAE7',
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 20,
+                                        backgroundColor: '#CCEAE7',
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                     }}
                                     activeOpacity={1}
-                                    onPress={() => {this.setState({ fotoProfil: true })}}>
-                                    <View 
+                                    onPress={() => { this.setState({ fotoProfil: true }) }}>
+                                    <View
                                         style={{
                                             justifyContent: 'center',
                                             alignItems: 'center',
@@ -1102,25 +1133,27 @@ export default class TambahDataWarga extends Component {
                                 <Modal
                                     backdropOpacity={0.5}
                                     isVisible={this.state.fotoProfil}
-                                    onBackdropPress={() => {this.setState({ fotoProfil: false }) }}
+                                    onBackdropPress={() => { this.setState({ fotoProfil: false }) }}
                                     style={styles.contentView}>
                                     <View style={styles.options}>
-                                        <TouchableOpacity 
+                                        <TouchableOpacity
                                             style={styles.codeBtn}
                                             onPress={this.cameraFoto}>
-                                            <View style = {{
+                                            <View style={{
                                                 flexDirection: 'row',
-                                                justifyContent: 'space-between'}}>
+                                                justifyContent: 'space-between'
+                                            }}>
                                                 <Icon name="camera-outline" size={24} color="#000" />
                                                 <Text style={styles.codeText}>Camera</Text>
                                             </View>
                                         </TouchableOpacity>
-                                        <TouchableOpacity 
+                                        <TouchableOpacity
                                             style={styles.codeBtn}
                                             onPress={this.selectFileFoto}>
-                                            <View style = {{
+                                            <View style={{
                                                 flexDirection: 'row',
-                                                justifyContent: 'space-between'}}>
+                                                justifyContent: 'space-between'
+                                            }}>
                                                 <Icon name="images-outline" size={24} color="#000" />
                                                 <Text style={styles.codeText}>Pilih File</Text>
                                             </View>
@@ -1135,84 +1168,85 @@ export default class TambahDataWarga extends Component {
                                     <Text style={styles.textItem}>
                                         NIK
                                         <Text style={styles.ketText}> (Nomor KTP)</Text>
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <TextInput 
+                                    <TextInput
                                         style={styles.inputText}
                                         value={this.state.nik}
                                         onChangeText={this.onNikChange}
                                         maxLength={16}
                                         keyboardType='phone-pad'
-                                        placeholder="Masukkan NIK" 
+                                        placeholder="Masukkan NIK"
                                         placeholderTextColor="#000"
                                     />
                                 </View>
                                 <View style={{
-                                    flexDirection:'row',
+                                    flexDirection: 'row',
                                     marginLeft: 5,
                                     marginRight: 20,
                                     marginTop: 7,
                                     marginBottom: 5,
-                                    justifyContent:'space-between'}}>
+                                    justifyContent: 'space-between'
+                                }}>
                                     <View style={styles.dateView2}>
                                         <Text style={styles.textItem}>
                                             Jenis Kelamin
-                                            <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                            <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                         </Text>
                                         <SelectDropdown
-                                            data = {gender}
-                                            onSelect = {this.onJenisKelaminChange.bind(this)}
+                                            data={gender}
+                                            onSelect={this.onJenisKelaminChange.bind(this)}
                                             defaultButtonText={"Pilih Jenis Kelamin"}
-                                            buttonTextAfterSelection = {(selectedItem) => {
+                                            buttonTextAfterSelection={(selectedItem) => {
                                                 return selectedItem;
                                             }}
-                                            rowTextForSelection = {(item) => {
+                                            rowTextForSelection={(item) => {
                                                 return item;
                                             }}
-                                            buttonStyle = {styles.dropdownBtnStyle2}
-                                            buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                            renderDropdownIcon = {() => {
+                                            buttonStyle={styles.dropdownBtnStyle2}
+                                            buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                            renderDropdownIcon={() => {
                                                 return (
                                                     <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                                 );
                                             }}
-                                            dropdownIconPosition = {'right'}
-                                            rowStyle = {styles.dropdownRowStyle}
-                                            rowTextStyle = {styles.dropdownRowTxtStyle}
+                                            dropdownIconPosition={'right'}
+                                            rowStyle={styles.dropdownRowStyle}
+                                            rowTextStyle={styles.dropdownRowTxtStyle}
                                         />
                                     </View>
                                     <View style={styles.dateView2}>
                                         <Text style={styles.textItem}>
                                             Golongan Darah
-                                            <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                            <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                         </Text>
                                         <SelectDropdown
-                                            data = {golonganDarah}
-                                            onSelect = {this.onGolonganDarahChange.bind(this)}
+                                            data={golonganDarah}
+                                            onSelect={this.onGolonganDarahChange.bind(this)}
                                             defaultButtonText={"Pilih Golongan Darah"}
-                                            buttonTextAfterSelection = {(selectedItem) => {
+                                            buttonTextAfterSelection={(selectedItem) => {
                                                 return selectedItem;
                                             }}
-                                            rowTextForSelection = {(item) => {
+                                            rowTextForSelection={(item) => {
                                                 return item;
                                             }}
-                                            buttonStyle = {styles.dropdownBtnStyle2}
-                                            buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                            renderDropdownIcon = {() => {
+                                            buttonStyle={styles.dropdownBtnStyle2}
+                                            buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                            renderDropdownIcon={() => {
                                                 return (
                                                     <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                                 );
                                             }}
-                                            dropdownIconPosition = {'right'}
-                                            rowStyle = {styles.dropdownRowStyle}
-                                            rowTextStyle = {styles.dropdownRowTxtStyle}
+                                            dropdownIconPosition={'right'}
+                                            rowStyle={styles.dropdownRowStyle}
+                                            rowTextStyle={styles.dropdownRowTxtStyle}
                                         />
                                     </View>
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Upload Foto KTP
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     {this.renderFileKtp()}
                                     <Text style={styles.ketFileText}>File yang diupload harus dalam bentuk/format (jpg, png, jpeg) maksimal 2MB</Text>
@@ -1220,7 +1254,7 @@ export default class TambahDataWarga extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Upload Foto Tanda Tangan
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     {this.renderFileTtd()}
                                     <Text style={styles.ketFileText}>File yang diupload harus dalam bentuk/format (jpg, png, jpeg) maksimal 2MB</Text>
@@ -1230,7 +1264,8 @@ export default class TambahDataWarga extends Component {
                                 <View style={{
                                     alignContent: 'center',
                                     alignItems: 'center',
-                                    padding: 10}}>
+                                    padding: 10
+                                }}>
                                     <Text style={{
                                         fontSize: 16,
                                         fontWeight: 'bold',
@@ -1239,16 +1274,17 @@ export default class TambahDataWarga extends Component {
                                     }}>Periode Hidup</Text>
                                 </View>
                                 <View style={{
-                                    flexDirection:'row',
+                                    flexDirection: 'row',
                                     marginLeft: 5,
                                     marginRight: 20,
                                     marginTop: 7,
                                     marginBottom: 5,
-                                    justifyContent:'space-between'}}>
+                                    justifyContent: 'space-between'
+                                }}>
                                     <View style={styles.dateView2}>
                                         <Text style={styles.textItem}>
                                             Tanggal Lahir
-                                            <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                            <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                         </Text>
                                         <DatePicker
                                             locale="id"
@@ -1259,21 +1295,21 @@ export default class TambahDataWarga extends Component {
                                             maximumDate={new Date()}
                                             iosDisplay="compact"
                                             androidDisplay="default"
-                                            style={[styles.datePickerStyle,{left:7,width:160}]}
+                                            style={[styles.datePickerStyle, { left: 7, width: 160 }]}
                                             textInputStyle={styles.dateText}
                                         />
                                     </View>
                                     <View style={styles.dateView2}>
                                         <Text style={styles.textItem}>
-                                        Tempat Lahir
-                                            <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                            Tempat Lahir
+                                            <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                         </Text>
-                                        <TextInput 
-                                            style={[styles.inputText,{left:7,width:160}]}
+                                        <TextInput
+                                            style={[styles.inputText, { left: 7, width: 160 }]}
                                             value={this.state.lokasiLahir}
                                             keyboardType='default'
                                             onChangeText={this.onLokasiLahirChange}
-                                            placeholder="Masukkan Tempat Lahir" 
+                                            placeholder="Masukkan Tempat Lahir"
                                             placeholderTextColor="#000"
                                         />
                                     </View>
@@ -1281,42 +1317,42 @@ export default class TambahDataWarga extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Nama Dokter
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <TextInput 
+                                    <TextInput
                                         style={styles.inputText}
                                         value={this.state.dokter}
                                         onChangeText={this.onDokterChange}
                                         keyboardType='default'
-                                        placeholder="Masukkan Nama Dokter" 
+                                        placeholder="Masukkan Nama Dokter"
                                         placeholderTextColor="#000"
                                     />
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Provinsi
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
-                                        data = {this.state.dataProvinsi.map(d => (d.name))}
-                                        onSelect = {this.onProvinsiChange.bind(this)}
+                                        data={this.state.dataProvinsi.map(d => (d.name))}
+                                        onSelect={this.onProvinsiChange.bind(this)}
                                         defaultButtonText={"Pilih Provinsi"}
-                                        buttonTextAfterSelection = {(selectedItem) => {
+                                        buttonTextAfterSelection={(selectedItem) => {
                                             return selectedItem;
                                         }}
-                                        rowTextForSelection = {(item) => {
+                                        rowTextForSelection={(item) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
-                                        dropdownIconPosition = {'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        dropdownIconPosition={'right'}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                     />
                                 </View>
                                 {this.renderKota()}
@@ -1325,7 +1361,8 @@ export default class TambahDataWarga extends Component {
                                 <View style={{
                                     alignContent: 'center',
                                     alignItems: 'center',
-                                    padding: 10}}>
+                                    padding: 10
+                                }}>
                                     <Text style={{
                                         fontSize: 16,
                                         fontWeight: 'bold',
@@ -1336,24 +1373,25 @@ export default class TambahDataWarga extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Nama
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <TextInput 
+                                    <TextInput
                                         style={styles.inputText}
                                         value={this.state.nama}
                                         keyboardType='default'
                                         onChangeText={this.onNameChange}
-                                        placeholder="Masukkan Nama Lengkap" 
+                                        placeholder="Masukkan Nama Lengkap"
                                         placeholderTextColor="#000"
                                     />
                                 </View>
-                                <View style={[styles.itemWrap,{marginBottom:30}]}>
+                                <View style={[styles.itemWrap, { marginBottom: 30 }]}>
                                     <Text style={styles.textItem}>Sejak Lahir?</Text>
                                     {question.map(res => {
                                         return (
                                             <View key={res.key} style={styles.container2}>
-                                                <View style = {{
-                                                    flexDirection: 'row'}}>
+                                                <View style={{
+                                                    flexDirection: 'row'
+                                                }}>
                                                     <TouchableOpacity
                                                         style={styles.radioCircle}
                                                         onPress={() => {
@@ -1369,13 +1407,14 @@ export default class TambahDataWarga extends Component {
                                                     paddingVertical: 1,
                                                     alignSelf: 'center',
                                                     marginLeft: 5,
-                                                    borderRadius: 5 }}>
+                                                    borderRadius: 5
+                                                }}>
                                                     <Text style={styles.radioText}>{res.text}</Text>
                                                 </View>
                                             </View>
                                         );
                                     })}
-                                    <View style={{position:'absolute',marginLeft:95,top:23}}>
+                                    <View style={{ position: 'absolute', marginLeft: 95, top: 23 }}>
                                         <DatePicker
                                             locale="id"
                                             onDateChange={this.onTanggalNama}
@@ -1385,46 +1424,47 @@ export default class TambahDataWarga extends Component {
                                             maximumDate={new Date()}
                                             iosDisplay="compact"
                                             androidDisplay="default"
-                                            style={[styles.datePickerStyle,{top:30,width:widths}]}
+                                            style={[styles.datePickerStyle, { top: 30, width: widths }]}
                                             textInputStyle={styles.dateText}
                                         />
-                                        <Text style={[styles.ketText,{left:2,top:35}]}>Isikan sejak kapan jika memilih Tidak</Text>
+                                        <Text style={[styles.ketText, { left: 2, top: 35 }]}>Isikan sejak kapan jika memilih Tidak</Text>
                                     </View>
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Agama
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
-                                        data = {this.state.dataAgama.map(a => (a.name))}
-                                        onSelect = {this.onAgamaChange.bind(this)}
+                                        data={this.state.dataAgama.map(a => (a.name))}
+                                        onSelect={this.onAgamaChange.bind(this)}
                                         defaultButtonText={"Pilih Agama"}
-                                        buttonTextAfterSelection = {(selectedItem) => {
+                                        buttonTextAfterSelection={(selectedItem) => {
                                             return selectedItem;
                                         }}
-                                        rowTextForSelection = {(item) => {
+                                        rowTextForSelection={(item) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
-                                        dropdownIconPosition = {'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        dropdownIconPosition={'right'}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                     />
                                 </View>
-                                <View style={[styles.itemWrap,{marginBottom:30}]}>
+                                <View style={[styles.itemWrap, { marginBottom: 30 }]}>
                                     <Text style={styles.textItem}>Sejak Lahir?</Text>
                                     {question.map(res => {
                                         return (
                                             <View key={res.key} style={styles.container2}>
-                                                <View style = {{
-                                                    flexDirection: 'row'}}>
+                                                <View style={{
+                                                    flexDirection: 'row'
+                                                }}>
                                                     <TouchableOpacity
                                                         style={styles.radioCircle}
                                                         onPress={() => {
@@ -1440,13 +1480,14 @@ export default class TambahDataWarga extends Component {
                                                     paddingVertical: 1,
                                                     alignSelf: 'center',
                                                     marginLeft: 5,
-                                                    borderRadius: 5 }}>
+                                                    borderRadius: 5
+                                                }}>
                                                     <Text style={styles.radioText}>{res.text}</Text>
                                                 </View>
                                             </View>
                                         );
                                     })}
-                                    <View style={{position:'absolute',marginLeft:95,top:23}}>
+                                    <View style={{ position: 'absolute', marginLeft: 95, top: 23 }}>
                                         <DatePicker
                                             locale="id"
                                             onDateChange={this.onTanggalAgama}
@@ -1456,16 +1497,16 @@ export default class TambahDataWarga extends Component {
                                             maximumDate={new Date()}
                                             iosDisplay="compact"
                                             androidDisplay="default"
-                                            style={[styles.datePickerStyle,{top:30,width:widths}]}
+                                            style={[styles.datePickerStyle, { top: 30, width: widths }]}
                                             textInputStyle={styles.dateText}
                                         />
-                                        <Text style={[styles.ketText,{left:2,top:35}]}>Isikan sejak kapan jika memilih Tidak</Text>
+                                        <Text style={[styles.ketText, { left: 2, top: 35 }]}>Isikan sejak kapan jika memilih Tidak</Text>
                                     </View>
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Upload Berkas
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     {this.renderFileAgama()}
                                     <Text style={styles.ketFileText}>File yang diupload harus dalam bentuk/format (jpg, png, jpeg) maksimal 2MB</Text>
@@ -1473,12 +1514,12 @@ export default class TambahDataWarga extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Kewarganegaraan
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
                                         // data={negara}
-                                        data = {this.state.dataNegara.map(n => (n.name))}
-                                        onSelect = {this.onNegaraChange.bind(this)}
+                                        data={this.state.dataNegara.map(n => (n.name))}
+                                        onSelect={this.onNegaraChange.bind(this)}
                                         defaultButtonText={'Pilih Negara'}
                                         buttonTextAfterSelection={(selectedItem, index) => {
                                             return selectedItem;
@@ -1486,26 +1527,27 @@ export default class TambahDataWarga extends Component {
                                         rowTextForSelection={(item, index) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
                                         dropdownIconPosition={'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                         selectedRowStyle={styles.dropdown1SelectedRowStyle}
                                     />
                                 </View>
-                                <View style={[styles.itemWrap,{marginBottom:30}]}>
+                                <View style={[styles.itemWrap, { marginBottom: 30 }]}>
                                     <Text style={styles.textItem}>Sejak Lahir?</Text>
                                     {question.map(res => {
                                         return (
                                             <View key={res.key} style={styles.container2}>
-                                                <View style = {{
-                                                    flexDirection: 'row'}}>
+                                                <View style={{
+                                                    flexDirection: 'row'
+                                                }}>
                                                     <TouchableOpacity
                                                         style={styles.radioCircle}
                                                         onPress={() => {
@@ -1521,13 +1563,14 @@ export default class TambahDataWarga extends Component {
                                                     paddingVertical: 1,
                                                     alignSelf: 'center',
                                                     marginLeft: 5,
-                                                    borderRadius: 5}}>
+                                                    borderRadius: 5
+                                                }}>
                                                     <Text style={styles.radioText}>{res.text}</Text>
                                                 </View>
                                             </View>
                                         );
                                     })}
-                                    <View style={{position:'absolute',marginLeft:95,top:23}}>
+                                    <View style={{ position: 'absolute', marginLeft: 95, top: 23 }}>
                                         <DatePicker
                                             locale="id"
                                             onDateChange={this.onTanggalNegara}
@@ -1537,28 +1580,30 @@ export default class TambahDataWarga extends Component {
                                             maximumDate={new Date()}
                                             iosDisplay="compact"
                                             androidDisplay="default"
-                                            style={[styles.datePickerStyle,{top:30,width:widths}]}
+                                            style={[styles.datePickerStyle, { top: 30, width: widths }]}
                                             textInputStyle={styles.dateText}
                                         />
-                                        <Text style={[styles.ketText,{left:2,top:35}]}>Isikan sejak kapan jika memilih Tidak</Text>
+                                        <Text style={[styles.ketText, { left: 2, top: 35 }]}>Isikan sejak kapan jika memilih Tidak</Text>
                                     </View>
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Alias
                                         <Text style={styles.ketText}> (Kosongkan jika tidak memiliki nama alias)</Text>
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <View style = {{
+                                    <View style={{
                                         flexDirection: 'row',
                                         marginTop: 5,
-                                        justifyContent: 'flex-start'}}>
-                                        <TouchableOpacity style={[styles.addBtn,{width:'35%'}]}
+                                        justifyContent: 'flex-start'
+                                    }}>
+                                        <TouchableOpacity style={[styles.addBtn, { width: '35%' }]}
                                             onPress={() => this.addAliasForm(this.state.aliasForm.length)}>
-                                            <View style = {{
+                                            <View style={{
                                                 flexDirection: 'row',
-                                                justifyContent: 'space-between'}}>
-                                                <Icon style={{right:5}} name='add-outline' color = {'#FFF'} size = {16}/>
+                                                justifyContent: 'space-between'
+                                            }}>
+                                                <Icon style={{ right: 5 }} name='add-outline' color={'#FFF'} size={16} />
                                                 <Text style={styles.addText}>Tambah Alias</Text>
                                             </View>
                                         </TouchableOpacity>
@@ -1570,19 +1615,21 @@ export default class TambahDataWarga extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Pekerjaan / Karir
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <View style = {{
+                                    <View style={{
                                         flexDirection: 'row',
                                         marginTop: 5,
-                                        justifyContent: 'flex-start'}}>
-                                        <TouchableOpacity style={[styles.addBtn,{width:'45%'}]}
+                                        justifyContent: 'flex-start'
+                                    }}>
+                                        <TouchableOpacity style={[styles.addBtn, { width: '45%' }]}
                                             onPress={() => this.addPekerjaanForm(this.state.pekerjaanForm.length)}>
                                             {/* onPress={() => {}}> */}
-                                            <View style = {{
+                                            <View style={{
                                                 flexDirection: 'row',
-                                                justifyContent: 'space-between'}}>
-                                                <Icon style={{right:5}} name='add-outline' color = {'#FFF'} size = {16}/>
+                                                justifyContent: 'space-between'
+                                            }}>
+                                                <Icon style={{ right: 5 }} name='add-outline' color={'#FFF'} size={16} />
                                                 <Text style={styles.addText}>Tambah Pekerjaan</Text>
                                             </View>
                                         </TouchableOpacity>
@@ -1609,7 +1656,7 @@ export default class TambahDataWarga extends Component {
                         <TouchableOpacity style={styles.footerBtn}
                             activeOpacity={0.5}
                             onPress={() => this.handleSubmit()}>
-                            <Text style = {styles.footerText}>Simpan Data</Text>
+                            <Text style={styles.footerText}>Simpan Data</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -1668,7 +1715,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginVertical: 10,
     },
-    codeText:{
+    codeText: {
         fontSize: 15,
         textAlign: 'center',
         left: 10,
@@ -1725,7 +1772,7 @@ const styles = StyleSheet.create({
         borderColor: '#cdcdcd',
         borderRadius: 10,
     },
-    dateText:{
+    dateText: {
         fontSize: 14,
     },
     dropdownBtnStyle: {
@@ -1741,7 +1788,7 @@ const styles = StyleSheet.create({
     dropdownBtnStyle2: {
         marginTop: 5,
         width: 160,
-        left:7,
+        left: 7,
         alignSelf: 'center',
         height: 45,
         backgroundColor: "#FFF",
@@ -1756,11 +1803,11 @@ const styles = StyleSheet.create({
         borderBottomColor: "#cdcdcd",
     },
     dropdownRowTxtStyle: { textAlign: 'left', fontSize: 14 },
-    dropdown1SelectedRowStyle: {backgroundColor: '#FFF'},
+    dropdown1SelectedRowStyle: { backgroundColor: '#FFF' },
     dropdown1searchInputStyleStyle: {
         backgroundColor: '#FFF',
     },
-    inputText:{
+    inputText: {
         alignSelf: 'center',
         marginTop: 5,
         paddingLeft: 10,
@@ -1773,7 +1820,7 @@ const styles = StyleSheet.create({
         borderColor: '#cdcdcd',
         borderRadius: 10,
     },
-    inputText2:{
+    inputText2: {
         alignSelf: 'center',
         marginTop: 5,
         paddingLeft: 10,
@@ -1791,25 +1838,25 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingLeft: 15,
         flexDirection: 'row',
-	},
+    },
     radioText: {
         fontSize: 13,
         color: '#000',
     },
-	radioCircle: {
-		height: 20,
-		width: 20,
-		borderRadius: 100,
-		borderWidth: 2,
-		borderColor: '#cdcdcd',
+    radioCircle: {
+        height: 20,
+        width: 20,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#cdcdcd',
         alignItems: 'center',
-		justifyContent: 'center',
+        justifyContent: 'center',
     },
     selectedRb: {
-		width: 10,
-		height: 10,
-		borderRadius: 50,
-		backgroundColor: '#4E4F6F',
+        width: 10,
+        height: 10,
+        borderRadius: 50,
+        backgroundColor: '#4E4F6F',
     },
     ketText: {
         fontSize: 12,
@@ -1825,8 +1872,8 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         fontStyle: 'italic',
     },
-    hapusFile:{
-        left:5,
+    hapusFile: {
+        left: 5,
         ...Platform.select({
             ios: {
                 top: 3,
@@ -1836,13 +1883,13 @@ const styles = StyleSheet.create({
             },
         })
     },
-    uploadText:{
+    uploadText: {
         color: '#000',
         fontSize: 12,
         top: 7,
         paddingLeft: 7,
     },
-    uploadText2:{
+    uploadText2: {
         color: '#000',
         fontSize: 12,
         marginRight: 95,
@@ -1859,7 +1906,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#cdcdcd',
     },
-    fileText:{
+    fileText: {
         color: '#000',
         fontSize: 14,
     },
@@ -1873,7 +1920,7 @@ const styles = StyleSheet.create({
         borderColor: '#4E4F6F',
         backgroundColor: '#4E4F6F',
     },
-    addText:{
+    addText: {
         color: '#FFF',
         fontSize: 14,
     },
@@ -1884,7 +1931,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#4E4F6F'
     },
-    footerText:{
+    footerText: {
         color: '#FFF',
         fontSize: 15,
         fontWeight: '700',
