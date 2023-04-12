@@ -278,31 +278,44 @@ export default class TambahDataWarga extends Component {
         )
     };
 
-    selectFileFoto = () => {
-        launchImageLibrary(
-            {
-                title: 'Select Image',
-                allowsEditing: false,
-                quality: 0.9,
-                maxWidth: 200,
-                maxHeight: 200,
-                mediaType: "photo",
-                includeBase64: true,
-                storageOptions: {
-                    skipBackup: true,
-                    cameraRoll: false
-                },
-            },
-            (response => {
-                if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                } else {
-                    this.setState({ foto: response, fotoProfil: false })
-                }
-            })
-        )
+    selectFileFoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            //   setImage(result.assets[0].uri);
+            this.setState({ foto: result.assets[0].uri })
+        }
+        // launchImageLibrary(
+        //     {
+        //         title: 'Select Image',
+        //         allowsEditing: false,
+        //         quality: 0.9,
+        //         maxWidth: 200,
+        //         maxHeight: 200,
+        //         mediaType: "photo",
+        //         includeBase64: true,
+        //         storageOptions: {
+        //             skipBackup: true,
+        //             cameraRoll: false
+        //         },
+        //     },
+        //     (response => {
+        //         if (response.didCancel) {
+        //             console.log('User cancelled image picker');
+        //         } else if (response.error) {
+        //             console.log('ImagePicker Error: ', response.error);
+        //         } else {
+        //             this.setState({ foto: response, fotoProfil: false })
+        //         }
+        //     })
+        // )
     };
 
     renderFileUriFoto() {
@@ -336,7 +349,7 @@ export default class TambahDataWarga extends Component {
 
     async FileKtpPicker() {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             // allowsEditing: true,
             // aspect: [4, 3],
             quality: 1,
@@ -344,7 +357,7 @@ export default class TambahDataWarga extends Component {
 
         console.log(result);
 
-        if (!result) {
+        if (!result.canceled) {
             //   setImage(result.assets[0].uri);
             this.setState({ fileKtp: result.assets[0].uri })
         }
@@ -440,7 +453,7 @@ export default class TambahDataWarga extends Component {
                     marginBottom: 5,
                     justifyContent: 'space-between'
                 }}>
-                    <Image
+                    {/* <Image
                         source={{
                             uri: Platform.OS === "android" ? this.state.fileKtp : this.state.fileKtp.replace("file://", ""),
                         }}
@@ -452,7 +465,8 @@ export default class TambahDataWarga extends Component {
                             borderRadius: 10,
                             borderColor: '#cdcdcd',
                         }}
-                    />
+                    /> */}
+                    <Image source={{ uri: this.state.fileKtp }} style={{ width: 200, height: 200 }} />
                     <View style={styles.dateView2}>
                         <View style={{
                             marginTop: 75,
