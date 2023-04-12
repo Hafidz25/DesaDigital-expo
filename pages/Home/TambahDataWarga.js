@@ -320,19 +320,26 @@ export default class TambahDataWarga extends Component {
 
     renderFileUriFoto() {
         if (this.state.foto.uri) {
-            return <Image
-                // source={{uri: `data:image/gif;base64,${this.state.image}`}}
-                source={{
-                    uri: Platform.OS === "android" ? this.state.foto.uri : this.state.foto.uri.replace("file://", ""),
-                }}
-                style={{
-                    width: 130,
-                    height: 140,
-                    borderWidth: 2,
-                    borderRadius: 100,
-                    borderColor: '#cdcdcd',
-                }}
-            />
+            return <Image source={{ uri: this.state.foto.uri }} style={{
+                width: 130,
+                height: 140,
+                borderWidth: 2,
+                borderRadius: 100,
+                borderColor: '#cdcdcd',
+            }} />
+            // <Image
+            //     // source={{uri: `data:image/gif;base64,${this.state.image}`}}
+            //     source={{
+            //         uri: Platform.OS === "android" ? this.state.foto.uri : this.state.foto.uri.replace("file://", ""),
+            //     }}
+            // style={{
+            //     width: 130,
+            //     height: 140,
+            //     borderWidth: 2,
+            //     borderRadius: 100,
+            //     borderColor: '#cdcdcd',
+            // }}
+            // />
         } else {
             return <Image
                 source={Logo}
