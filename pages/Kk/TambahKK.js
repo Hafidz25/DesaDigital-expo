@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { 
+import {
     View, TextInput, Text, StyleSheet, TouchableOpacity,
-    ScrollView, Platform, Alert,
+    ScrollView, Platform, Alert, Image
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const peran = ["Ayah", "Ibu", "Anak Kandung", "Anak Tiri", "Anak Asuh"];
 
 export default class TambahKK extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             access_token: '',
@@ -45,12 +46,12 @@ export default class TambahKK extends Component {
     componentDidMount = () => {
         this.getToken();
     }
-    
+
     async getToken() {
         try {
             let userData = await AsyncStorage.getItem('access_token');
             let data = JSON.parse(userData);
-            this.setState({access_token: data})
+            this.setState({ access_token: data })
         } catch (error) {
             console.log("Something went wrong", error);
         }
@@ -74,15 +75,15 @@ export default class TambahKK extends Component {
             method: "GET",
             headers,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataPenduduk: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataPenduduk: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _GetProvinsi = async () => {
@@ -100,15 +101,15 @@ export default class TambahKK extends Component {
             method: "GET",
             headers,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataProvinsi: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataProvinsi: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _GetKabupaten = async () => {
@@ -135,15 +136,15 @@ export default class TambahKK extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataKabupaten: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataKabupaten: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _GetKecamatan = async () => {
@@ -170,15 +171,15 @@ export default class TambahKK extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataKecamatan: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataKecamatan: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _GetDesa = async () => {
@@ -205,15 +206,15 @@ export default class TambahKK extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataDesa: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataDesa: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _GetKodePos = async () => {
@@ -240,15 +241,15 @@ export default class TambahKK extends Component {
             headers,
             body: JSON.stringify(body),
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({
-                dataKodePos: responseJson.data
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataKodePos: responseJson.data
+                })
             })
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     onNoKKChange = (text) => {
@@ -258,27 +259,27 @@ export default class TambahKK extends Component {
             });
         }
     }
-    
+
     onPendudukChange = (penduduk) => {
         setTimeout(() => {
             const data = this.state.dataPenduduk
             const index = data.findIndex(x => x.legal_name === penduduk)
-            this.setState({idPenduduk:data[index].id, penduduk:penduduk})
+            this.setState({ idPenduduk: data[index].id, penduduk: penduduk })
             this._GetKabupaten()
         }, 0);
     }
 
     onRoleChange = (role) => {
-        if(role == 'Ayah'){
-            this.setState({roleId: '1'})
+        if (role == 'Ayah') {
+            this.setState({ roleId: '1' })
         } else if (role == 'Ibu') {
-            this.setState({roleId: '2'})
+            this.setState({ roleId: '2' })
         } else if (role == 'Anak Kandung') {
-            this.setState({roleId: '3'})
+            this.setState({ roleId: '3' })
         } else if (role == 'Anak Tiri') {
-            this.setState({roleId: '4'})
+            this.setState({ roleId: '4' })
         } else if (role == 'Anak Asuh') {
-            this.setState({roleId: '5'})
+            this.setState({ roleId: '5' })
         }
     }
 
@@ -286,7 +287,7 @@ export default class TambahKK extends Component {
         setTimeout(() => {
             const data = this.state.dataProvinsi
             const index = data.findIndex(x => x.name === provinsi)
-            this.setState({idProvinsi:data[index].id, provinsi:provinsi})
+            this.setState({ idProvinsi: data[index].id, provinsi: provinsi })
             this._GetKabupaten()
         }, 0);
     }
@@ -295,7 +296,7 @@ export default class TambahKK extends Component {
         setTimeout(() => {
             const data = this.state.dataKabupaten
             const index = data.findIndex(x => x.name === kabupaten)
-            this.setState({idKabupaten:data[index].id, kabupaten:kabupaten})
+            this.setState({ idKabupaten: data[index].id, kabupaten: kabupaten })
             this._GetKecamatan()
         }, 0);
     }
@@ -304,7 +305,7 @@ export default class TambahKK extends Component {
         setTimeout(() => {
             const data = this.state.dataKecamatan
             const index = data.findIndex(x => x.name === kecamatan)
-            this.setState({idKecamatan:data[index].id, kecamatan:kecamatan})
+            this.setState({ idKecamatan: data[index].id, kecamatan: kecamatan })
             this._GetDesa()
         }, 0);
     }
@@ -313,19 +314,21 @@ export default class TambahKK extends Component {
         setTimeout(() => {
             const data = this.state.dataDesa
             const index = data.findIndex(x => x.name === desa)
-            this.setState({idDesa:data[index].id, desa:desa})
+            this.setState({ idDesa: data[index].id, desa: desa })
             this._GetKodePos()
         }, 0);
     }
 
-    renderFileFoto (){
-        if(this.state.fotokk != ''){
+    renderFileFoto() {
+        if (this.state.fotokk != '') {
             return (
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between'}}>
+                    justifyContent: 'space-between'
+                }}>
+                    <Image source={{ uri: this.state.fotokk }} style={{ width: 200, height: 200 }} />
                     <TouchableOpacity
-                        onPress={() => {this.setState({fotokk: ''})}}>
+                        onPress={() => { this.setState({ fotokk: '' }) }}>
                         <Icon style={styles.hapusFile} name="close-outline" size={22} color="#a12927" />
                     </TouchableOpacity>
                     <Text style={styles.uploadText}>
@@ -337,54 +340,55 @@ export default class TambahKK extends Component {
             return (
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between'}}>
+                    justifyContent: 'space-between'
+                }}>
                     <Text style={styles.uploadText}>No File Selected</Text>
                 </View>
             )
         }
     }
 
-    renderKabupaten(){
-        if(this.state.dataKabupaten != ''){
-            return(
+    renderKabupaten() {
+        if (this.state.dataKabupaten != '') {
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kabupaten
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
                     <SelectDropdown
-                        data = {this.state.dataKabupaten.map(k => (k.name))}
-                        onSelect = {this.onKabupatenChange.bind(this)}
+                        data={this.state.dataKabupaten.map(k => (k.name))}
+                        onSelect={this.onKabupatenChange.bind(this)}
                         defaultButtonText={"Pilih Kabupaten"}
-                        buttonTextAfterSelection = {(selectedItem) => {
+                        buttonTextAfterSelection={(selectedItem) => {
                             return selectedItem;
                         }}
-                        rowTextForSelection = {(item) => {
+                        rowTextForSelection={(item) => {
                             return item;
                         }}
-                        buttonStyle = {styles.dropdownBtnStyle}
-                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                        renderDropdownIcon = {() => {
+                        buttonStyle={styles.dropdownBtnStyle}
+                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                        renderDropdownIcon={() => {
                             return (
                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                             );
                         }}
-                        dropdownIconPosition = {'right'}
-                        rowStyle = {styles.dropdownRowStyle}
-                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                        dropdownIconPosition={'right'}
+                        rowStyle={styles.dropdownRowStyle}
+                        rowTextStyle={styles.dropdownRowTxtStyle}
                     />
                 </View>
             )
         } else {
-            return(
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kabupaten
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={styles.inputText}
-                        placeholder="Pilih Kabupaten" 
+                        placeholder="Pilih Kabupaten"
                         placeholderTextColor='#777'
                         editable={false}
                     />
@@ -393,47 +397,47 @@ export default class TambahKK extends Component {
         }
     }
 
-    renderKecamatan(){
-        if(this.state.dataKecamatan != ''){
-            return(
+    renderKecamatan() {
+        if (this.state.dataKecamatan != '') {
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kecamatan
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
                     <SelectDropdown
-                        data = {this.state.dataKecamatan.map(k => (k.name))}
-                        onSelect = {this.onKecamatanChange.bind(this)}
+                        data={this.state.dataKecamatan.map(k => (k.name))}
+                        onSelect={this.onKecamatanChange.bind(this)}
                         defaultButtonText={"Pilih Kecamatan"}
-                        buttonTextAfterSelection = {(selectedItem) => {
+                        buttonTextAfterSelection={(selectedItem) => {
                             return selectedItem;
                         }}
-                        rowTextForSelection = {(item) => {
+                        rowTextForSelection={(item) => {
                             return item;
                         }}
-                        buttonStyle = {styles.dropdownBtnStyle}
-                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                        renderDropdownIcon = {() => {
+                        buttonStyle={styles.dropdownBtnStyle}
+                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                        renderDropdownIcon={() => {
                             return (
                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                             );
                         }}
-                        dropdownIconPosition = {'right'}
-                        rowStyle = {styles.dropdownRowStyle}
-                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                        dropdownIconPosition={'right'}
+                        rowStyle={styles.dropdownRowStyle}
+                        rowTextStyle={styles.dropdownRowTxtStyle}
                     />
                 </View>
             )
         } else {
-            return(
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kecamatan
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={styles.inputText}
-                        placeholder="Pilih Kecamatan" 
+                        placeholder="Pilih Kecamatan"
                         placeholderTextColor='#777'
                         editable={false}
                     />
@@ -442,47 +446,47 @@ export default class TambahKK extends Component {
         }
     }
 
-    renderDesa(){
-        if(this.state.dataDesa != ''){
-            return(
+    renderDesa() {
+        if (this.state.dataDesa != '') {
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Desa
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
                     <SelectDropdown
-                        data = {this.state.dataDesa.map(k => (k.name))}
-                        onSelect = {this.onDesaChange.bind(this)}
+                        data={this.state.dataDesa.map(k => (k.name))}
+                        onSelect={this.onDesaChange.bind(this)}
                         defaultButtonText={"Pilih Desa"}
-                        buttonTextAfterSelection = {(selectedItem) => {
+                        buttonTextAfterSelection={(selectedItem) => {
                             return selectedItem;
                         }}
-                        rowTextForSelection = {(item) => {
+                        rowTextForSelection={(item) => {
                             return item;
                         }}
-                        buttonStyle = {styles.dropdownBtnStyle}
-                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                        renderDropdownIcon = {() => {
+                        buttonStyle={styles.dropdownBtnStyle}
+                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                        renderDropdownIcon={() => {
                             return (
                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                             );
                         }}
-                        dropdownIconPosition = {'right'}
-                        rowStyle = {styles.dropdownRowStyle}
-                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                        dropdownIconPosition={'right'}
+                        rowStyle={styles.dropdownRowStyle}
+                        rowTextStyle={styles.dropdownRowTxtStyle}
                     />
                 </View>
             )
         } else {
-            return(
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Desa
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={styles.inputText}
-                        placeholder="Pilih Desa" 
+                        placeholder="Pilih Desa"
                         placeholderTextColor='#777'
                         editable={false}
                     />
@@ -491,13 +495,13 @@ export default class TambahKK extends Component {
         }
     }
 
-    renderKodePos(){
-        if(this.state.dataKodePos != ''){
-            return(
+    renderKodePos() {
+        if (this.state.dataKodePos != '') {
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kode Pos
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
                     <Text style={styles.inputText2}>
                         {this.state.dataKodePos.map(x => x.name)}
@@ -505,13 +509,13 @@ export default class TambahKK extends Component {
                 </View>
             )
         } else {
-            return(
+            return (
                 <View style={styles.itemWrap}>
                     <Text style={styles.textItem}>
                         Kode Pos
-                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                     </Text>
-                    <TextInput 
+                    <TextInput
                         style={styles.inputText}
                         placeholder="Kode Pos"
                         placeholderTextColor='#777'
@@ -527,8 +531,8 @@ export default class TambahKK extends Component {
             {
                 title: 'Select Image',
                 allowsEditing: false,
-                maxWidth:200,
-                maxHeight:200,
+                maxWidth: 200,
+                maxHeight: 200,
                 mediaType: "photo",
                 includeBase64: true,
                 storageOptions: {
@@ -548,34 +552,47 @@ export default class TambahKK extends Component {
         )
     };
 
-    selectFileFoto = () => {
-        launchImageLibrary(
-            {
-                title: 'Select Image',
-                allowsEditing: false,
-                quality:0.9,
-                maxWidth:200,
-                maxHeight:200,
-                mediaType: "photo",
-                includeBase64: true,
-                storageOptions: {
-                    skipBackup: true,
-                    cameraRoll: false
-                },
-            },
-            (response => {
-                if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                } else {
-                    this.setState({ fotokk: response, modalFoto: false })
-                }
-            })
-        )
+    selectFileFoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            // allowsEditing: true,
+            // aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            //   setImage(result.assets[0].uri);
+            this.setState({ fotokk: result.assets[0].uri, modalFoto: false })
+        }
+        // launchImageLibrary(
+        //     {
+        //         title: 'Select Image',
+        //         allowsEditing: false,
+        //         quality:0.9,
+        //         maxWidth:200,
+        //         maxHeight:200,
+        //         mediaType: "photo",
+        //         includeBase64: true,
+        //         storageOptions: {
+        //             skipBackup: true,
+        //             cameraRoll: false
+        //         },
+        //     },
+        //     (response => {
+        //         if (response.didCancel) {
+        //             console.log('User cancelled image picker');
+        //         } else if (response.error) {
+        //             console.log('ImagePicker Error: ', response.error);
+        //         } else {
+        //             this.setState({ fotokk: response, modalFoto: false })
+        //         }
+        //     })
+        // )
     };
 
-    handleSubmit = async() => {
+    handleSubmit = async () => {
         const token = this.state.access_token;
 
         const no_kk = this.state.noKK
@@ -591,11 +608,11 @@ export default class TambahKK extends Component {
 
 
         var path_kk
-        if(this.state.fotokk == ''){
+        if (this.state.fotokk == '') {
             path_kk = this.state.fotokk
         } else {
             path_kk = {
-                uri: 'data:'+this.state.fotokk.type+';base64,' + this.state.fotokk.base64,
+                uri: 'data:' + this.state.fotokk.type + ';base64,' + this.state.fotokk.base64,
                 name: this.state.fotokk.fileName,
                 type: this.state.fotokk.type,
             }
@@ -626,29 +643,29 @@ export default class TambahKK extends Component {
             headers,
             body: formData,
         })
-        .then((response) => {
-            if(response.status == 201){
-                Alert.alert(
-                    "Data Berhasil Ditambahkan",
-                    [
-                        { text: "OK", onPress: () => this.props.navigation.replace('Dashboard')}
-                    ],{ cancelable: false }
-                )
-            } else{
-                alert("Tambah Data Gagal")
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .then((response) => {
+                if (response.status == 201) {
+                    Alert.alert(
+                        "Data Berhasil Ditambahkan",
+                        [
+                            { text: "OK", onPress: () => this.props.navigation.replace('Dashboard') }
+                        ], { cancelable: false }
+                    )
+                } else {
+                    alert("Tambah Data Gagal")
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={styles.container}>
                 <View style={styles.header}></View>
-                <View style={{marginTop:10,marginBottom:10,padding:10}}></View>
+                <View style={{ marginTop: 10, marginBottom: 10, padding: 10 }}></View>
                 <View style={styles.content}>
                     <ScrollView>
                         <View style={styles.viewList}>
@@ -656,97 +673,97 @@ export default class TambahKK extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Nomor Kartu Keluarga
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <TextInput 
+                                    <TextInput
                                         style={styles.inputText}
                                         value={this.state.noKK}
                                         onChangeText={this.onNoKKChange}
                                         maxLength={16}
                                         keyboardType='phone-pad'
-                                        placeholder="Masukkan Nomor Kartu Keluarga" 
+                                        placeholder="Masukkan Nomor Kartu Keluarga"
                                         placeholderTextColor="#000"
                                     />
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Nama Kepala Keluarga
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
-                                        data = {this.state.dataPenduduk.map(d => (d.legal_name))}
-                                        onSelect = {this.onPendudukChange.bind(this)}
+                                        data={this.state.dataPenduduk.map(d => (d.legal_name))}
+                                        onSelect={this.onPendudukChange.bind(this)}
                                         defaultButtonText={"Pilih Nama Kepala Keluarga"}
-                                        buttonTextAfterSelection = {(selectedItem) => {
+                                        buttonTextAfterSelection={(selectedItem) => {
                                             return selectedItem;
                                         }}
-                                        rowTextForSelection = {(item) => {
+                                        rowTextForSelection={(item) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
-                                        dropdownIconPosition = {'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        dropdownIconPosition={'right'}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                     />
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Peran
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
-                                        data = {peran}
-                                        onSelect = {this.onRoleChange.bind(this)}
+                                        data={peran}
+                                        onSelect={this.onRoleChange.bind(this)}
                                         defaultButtonText={"Pilih Peran"}
-                                        buttonTextAfterSelection = {(selectedItem) => {
+                                        buttonTextAfterSelection={(selectedItem) => {
                                             return selectedItem;
                                         }}
-                                        rowTextForSelection = {(item) => {
+                                        rowTextForSelection={(item) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
-                                        dropdownIconPosition = {'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        dropdownIconPosition={'right'}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                     />
                                 </View>
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Provinsi
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
                                     <SelectDropdown
-                                        data = {this.state.dataProvinsi.map(d => (d.name))}
-                                        onSelect = {this.onProvinsiChange.bind(this)}
+                                        data={this.state.dataProvinsi.map(d => (d.name))}
+                                        onSelect={this.onProvinsiChange.bind(this)}
                                         defaultButtonText={"Pilih Provinsi"}
-                                        buttonTextAfterSelection = {(selectedItem) => {
+                                        buttonTextAfterSelection={(selectedItem) => {
                                             return selectedItem;
                                         }}
-                                        rowTextForSelection = {(item) => {
+                                        rowTextForSelection={(item) => {
                                             return item;
                                         }}
-                                        buttonStyle = {styles.dropdownBtnStyle}
-                                        buttonTextStyle = {styles.dropdownBtnTxtStyle}
-                                        renderDropdownIcon = {() => {
+                                        buttonStyle={styles.dropdownBtnStyle}
+                                        buttonTextStyle={styles.dropdownBtnTxtStyle}
+                                        renderDropdownIcon={() => {
                                             return (
                                                 <Icon name='chevron-down' color={'#4E4F6F'} size={18} />
                                             );
                                         }}
-                                        dropdownIconPosition = {'right'}
-                                        rowStyle = {styles.dropdownRowStyle}
-                                        rowTextStyle = {styles.dropdownRowTxtStyle}
+                                        dropdownIconPosition={'right'}
+                                        rowStyle={styles.dropdownRowStyle}
+                                        rowTextStyle={styles.dropdownRowTxtStyle}
                                     />
                                 </View>
                                 {this.renderKabupaten()}
@@ -756,38 +773,41 @@ export default class TambahKK extends Component {
                                 <View style={styles.itemWrap}>
                                     <Text style={styles.textItem}>
                                         Upload Foto Kartu Keluarga
-                                        <Text style={{fontSize: 13, color:'#a12927'}}> *</Text>
+                                        <Text style={{ fontSize: 13, color: '#a12927' }}> *</Text>
                                     </Text>
-                                    <View style = {{
+                                    <View style={{
                                         flexDirection: 'row',
                                         marginTop: 10,
-                                        justifyContent: 'flex-start'}}>
+                                        justifyContent: 'flex-start'
+                                    }}>
                                         <TouchableOpacity style={styles.fileBtn}
-                                            onPress={() => {this.setState({ modalFoto: true })}}>
-                                            <Text style = {styles.fileText}>Pilih File</Text>
+                                            onPress={() => { this.setState({ modalFoto: true }) }}>
+                                            <Text style={styles.fileText}>Pilih File</Text>
                                         </TouchableOpacity>
                                         <Modal
                                             backdropOpacity={0.5}
                                             isVisible={this.state.modalFoto}
-                                            onBackdropPress={() => {this.setState({ modalFoto: false }) }}
+                                            onBackdropPress={() => { this.setState({ modalFoto: false }) }}
                                             style={styles.contentView}>
                                             <View style={styles.options}>
-                                                <TouchableOpacity 
+                                                <TouchableOpacity
                                                     style={styles.codeBtn}
                                                     onPress={this.cameraFoto}>
-                                                    <View style = {{
+                                                    <View style={{
                                                         flexDirection: 'row',
-                                                        justifyContent: 'space-between'}}>
+                                                        justifyContent: 'space-between'
+                                                    }}>
                                                         <Icon name="camera-outline" size={24} color="#000" />
                                                         <Text style={styles.codeText}>Camera</Text>
                                                     </View>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity 
+                                                <TouchableOpacity
                                                     style={styles.codeBtn}
                                                     onPress={this.selectFileFoto}>
-                                                    <View style = {{
+                                                    <View style={{
                                                         flexDirection: 'row',
-                                                        justifyContent: 'space-between'}}>
+                                                        justifyContent: 'space-between'
+                                                    }}>
                                                         <Icon name="images-outline" size={24} color="#000" />
                                                         <Text style={styles.codeText}>Pilih File</Text>
                                                     </View>
@@ -805,7 +825,7 @@ export default class TambahKK extends Component {
                         <TouchableOpacity style={styles.footerBtn}
                             activeOpacity={0.5}
                             onPress={() => this.handleSubmit()}>
-                            <Text style = {styles.footerText}>Simpan Data</Text>
+                            <Text style={styles.footerText}>Simpan Data</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -864,7 +884,7 @@ const styles = StyleSheet.create({
     dropdownBtnStyle2: {
         marginTop: 5,
         width: 160,
-        left:7,
+        left: 7,
         alignSelf: 'center',
         height: 45,
         backgroundColor: "#FFF",
@@ -879,11 +899,11 @@ const styles = StyleSheet.create({
         borderBottomColor: "#cdcdcd",
     },
     dropdownRowTxtStyle: { textAlign: 'left', fontSize: 14 },
-    dropdown1SelectedRowStyle: {backgroundColor: '#FFF'},
+    dropdown1SelectedRowStyle: { backgroundColor: '#FFF' },
     dropdown1searchInputStyleStyle: {
         backgroundColor: '#FFF',
     },
-    inputText:{
+    inputText: {
         alignSelf: 'center',
         marginTop: 5,
         paddingLeft: 10,
@@ -896,9 +916,9 @@ const styles = StyleSheet.create({
         borderColor: '#cdcdcd',
         borderRadius: 10,
     },
-    inputText2:{
+    inputText2: {
         alignSelf: 'center',
-        paddingVertical:12,
+        paddingVertical: 12,
         marginTop: 5,
         paddingLeft: 10,
         paddingRight: 10,
@@ -919,7 +939,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontStyle: 'italic',
     },
-    uploadText:{
+    uploadText: {
         color: '#000',
         fontSize: 12,
         top: 7,
@@ -935,7 +955,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#cdcdcd',
     },
-    fileText:{
+    fileText: {
         color: '#000',
         fontSize: 14,
     },
@@ -946,7 +966,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#4E4F6F'
     },
-    footerText:{
+    footerText: {
         color: '#FFF',
         fontSize: 15,
         fontWeight: '700',
@@ -976,7 +996,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginVertical: 10,
     },
-    codeText:{
+    codeText: {
         fontSize: 15,
         textAlign: 'center',
         left: 10,
@@ -989,8 +1009,8 @@ const styles = StyleSheet.create({
             },
         })
     },
-    hapusFile:{
-        left:5,
+    hapusFile: {
+        left: 5,
         ...Platform.select({
             ios: {
                 top: 3,
@@ -1000,7 +1020,7 @@ const styles = StyleSheet.create({
             },
         })
     },
-    uploadText:{
+    uploadText: {
         color: '#000',
         fontSize: 12,
         top: 7,
