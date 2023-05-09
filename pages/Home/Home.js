@@ -48,7 +48,7 @@ export default class Home extends Component {
                                 flexDirection: 'row',
                                 justifyContent: 'space-between'
                             }}>
-                                <Icon style={{ right: 5 }} name='people-outline' color={'#FFF'} size={25} />
+                                <Icon style={{ right: 5 }} name='people-outline' color={'#F45050'} size={25} />
                                 <Text style={styles.batalText}>Data Warga</Text>
                             </View>
                         </TouchableOpacity>
@@ -58,7 +58,7 @@ export default class Home extends Component {
                                 flexDirection: 'row',
                                 justifyContent: 'space-between'
                             }}>
-                                <Icon style={{ right: 5 }} name='person-add-outline' color={'#FFF'} size={25} />
+                                <Icon style={{ right: 5 }} name='person-add-outline' color={'#F45050'} size={25} />
                                 <Text style={styles.batalText}>Daftarkan Warga</Text>
                             </View>
                         </TouchableOpacity>
@@ -238,12 +238,13 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#71B450', //'#C98827',
+        backgroundColor: '#F0F0F0', //'#C98827',
         borderRadius: 10,
     },
     batalText: {
-        color: '#FFF',
+        color: '#F45050',
         fontSize: 13,
+        fontWeight: 'bold',
         top: 4,
         left: 5,
     },
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 60,
         height: 60,
-        backgroundColor: '#98E5DE',
+        backgroundColor: '#F0F0F0',
         borderRadius: 15,
     },
     menuText: {

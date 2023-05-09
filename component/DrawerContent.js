@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
 import {
     Title, Caption, Drawer,
 } from 'react-native-paper';
@@ -7,23 +7,23 @@ import { DrawerItem } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class DrawerContent extends Component {
-    constructor(props){
-		super(props)
-		this.state = {
+    constructor(props) {
+        super(props)
+        this.state = {
             access_token: [],
             refresh_token: [],
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getToken();
     }
-    
+
     async getToken() {
         try {
             let userData = await AsyncStorage.getItem('access_token');
             let data = JSON.parse(userData);
-            this.setState({access_token: data})
+            this.setState({ access_token: data })
             this.getRefreshToken()
         } catch (error) {
             console.log("Something went wrong", error);
@@ -34,7 +34,7 @@ export default class DrawerContent extends Component {
         try {
             let userData = await AsyncStorage.getItem('refresh_token');
             let data = JSON.parse(userData);
-            this.setState({refresh_token: data})
+            this.setState({ refresh_token: data })
             this.getRefreshToken()
         } catch (error) {
             console.log("Something went wrong", error);
@@ -59,14 +59,14 @@ export default class DrawerContent extends Component {
             headers,
             body: JSON.stringify(body)
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            console.log(responseJson)
-            this.setState({access_token: responseJson.access_token})
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                this.setState({ access_token: responseJson.access_token })
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _Logout = async () => {
@@ -83,57 +83,57 @@ export default class DrawerContent extends Component {
             method: "DELETE",
             headers,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            if(responseJson.message == 'Token is Expired'){
-                this._RefreshToken()
-            } else if(responseJson.message == 'User successfully signed out'){
-                this._BerhasilLogout()
-            }
-        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.message == 'Token is Expired') {
+                    this._RefreshToken()
+                } else if (responseJson.message == 'User successfully signed out') {
+                    this._BerhasilLogout()
+                }
+            })
     }
 
     _BerhasilLogout = async () => {
         try {
             await AsyncStorage.clear();
             this.props.navigation.replace('Auth');
-        }catch(error){  
-            alert(error)  
+        } catch (error) {
+            alert(error)
         }
     }
 
     render() {
         return (
-            <View style={{flex:1, backgroundColor:'#4E4F6F'}}>
+            <View style={{ flex: 1, backgroundColor: '#3C486B' }}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
-                        <View style={{flexDirection:'row',marginTop: 15}}>
-                            <View style={{marginLeft:5, flexDirection:'column'}}>
+                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                            <View style={{ marginLeft: 5, flexDirection: 'column' }}>
                                 <Title style={styles.title}>Ahmad Hasanudin</Title>
                                 <Caption style={styles.caption}>RT 03 RW 05 KEL JAMBESARI</Caption>
                             </View>
                         </View>
                     </View>
                     <Drawer.Section style={styles.drawerSection}>
-                        <DrawerItem 
+                        <DrawerItem
                             label="Home"
-                            labelStyle={{color: '#FFF'}}
-                            onPress={() => {this.props.navigation.navigate('Home')}}
+                            labelStyle={{ color: '#FFF' }}
+                            onPress={() => { this.props.navigation.navigate('Home') }}
                         />
                         <DrawerItem
                             label="Profil"
-                            labelStyle={{color: '#FFF'}}
-                            onPress={() => {this.props.navigation.navigate('Profil')}}
+                            labelStyle={{ color: '#FFF' }}
+                            onPress={() => { this.props.navigation.navigate('Profil') }}
                         />
-                        <DrawerItem 
+                        <DrawerItem
                             label="Layanan"
-                            labelStyle={{color: '#FFF'}}
-                            onPress={() => {this.props.navigation.navigate('Layanan')}}
+                            labelStyle={{ color: '#FFF' }}
+                            onPress={() => { this.props.navigation.navigate('Layanan') }}
                         />
                     </Drawer.Section>
                 </View>
                 <Drawer.Section style={styles.bottomDrawerSection}>
-                    <DrawerItem 
+                    <DrawerItem
                         label="LOGOUT"
                         labelStyle={{
                             color: '#FFF',
@@ -176,6 +176,6 @@ const styles = StyleSheet.create({
     bottomDrawerSection: {
         height: 50,
         top: 4,
-        backgroundColor: '#EE4A4A',
+        backgroundColor: '#F45050',
     },
-  });
+});
