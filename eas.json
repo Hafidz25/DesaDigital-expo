@@ -3,13 +3,6 @@
     "version": ">= 3.9.1"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "resourceClass": "m-medium"
-      }
-    },
     "preview": {
       "android": {
         "buildType": "apk"
@@ -23,11 +16,7 @@
     "preview3": {
       "developmentClient": true
     },
-    "production": {
-      "ios": {
-        "resourceClass": "m-medium"
-      }
-    }
+    "production": {}
   },
   "submit": {
     "production": {}
